@@ -1,0 +1,86 @@
+name:                imageratops
+version:             0.1.0.0
+#synopsis:
+#description:
+homepage:            https://github.com/knomi/imageratops#readme
+license:             BSD3
+author:              Konstantin Zudov
+maintainer:          co@zudov.me
+copyright:           Knomi Oy, 2017
+category:            Web
+extra-source-files:
+- README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - bytestring
+  - text
+  - async
+  - stm
+  - mtl
+  - transformers
+  - resourcet
+  - exceptions
+  - safe-exceptions
+  - lens
+  - aeson
+  - hashable
+  - uuid
+  - transformers-base
+  - monad-control
+  - lifted-base
+
+  - JuicyPixels
+  - JuicyPixels-scale-dct
+  - servant-JuicyPixels
+
+  - http-client
+  - http-client-tls
+
+  - amazonka
+  - amazonka-core
+  - amazonka-s3
+
+  - servant
+  - servant-server
+
+  - wai
+  - wai-extra
+  - warp
+
+default-extensions:
+- DataKinds
+- DeriveGeneric
+- DeriveFunctor
+- FlexibleContexts
+- FlexibleInstances
+- GADTs
+- KindSignatures
+- LambdaCase
+- LambdaCase
+- MultiParamTypeClasses
+- NoImplicitPrelude
+- NoMonomorphismRestriction
+- PartialTypeSignatures
+- PatternSynonyms
+- PolyKinds
+- RankNTypes
+- RecordWildCards
+- ScopedTypeVariables
+- StandaloneDeriving
+- TemplateHaskell
+- TupleSections
+- TypeApplications
+- TypeFamilies
+- TypeOperators
+- ViewPatterns
+
+library:
+  source-dirs: src
+  ghc-options:
+  - -Wall
+executables:
+  imageratops-server:
+    source-dirs:      app
+    main:             Main.hs
+    dependencies:     imageratops

@@ -1,0 +1,16 @@
+:set -XOverloadedStrings
+:set -XDataKinds
+:set -XFlexibleContexts
+:set -XPolyKinds
+:set -XTypeOperators
+:set -XTypeFamilies
+:set -XFlexibleContexts
+:set -XFlexibleInstances
+:set -XNoMonomorphismRestriction
+:set -XGADTs
+:set -XTypeSynonymInstances
+:set -XTemplateHaskell
+:set -XStandaloneDeriving
+:set -XScopedTypeVariables
+:set -XLambdaCase
+:set -XViewPatterns

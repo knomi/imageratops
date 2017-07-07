@@ -1,0 +1,101 @@
+-- This file has been generated from package.yaml by hpack version 0.17.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           imageratops
+version:        0.1.0.0
+category:       Web
+homepage:       https://github.com/knomi/imageratops#readme
+author:         Konstantin Zudov
+maintainer:     co@zudov.me
+copyright:      Knomi Oy, 2017
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    README.md
+
+library
+  hs-source-dirs:
+      src
+  default-extensions: DataKinds DeriveGeneric DeriveFunctor FlexibleContexts FlexibleInstances GADTs KindSignatures LambdaCase LambdaCase MultiParamTypeClasses NoImplicitPrelude NoMonomorphismRestriction PartialTypeSignatures PatternSynonyms PolyKinds RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeApplications TypeFamilies TypeOperators ViewPatterns
+  ghc-options: -Wall
+  build-depends:
+      base >= 4.7 && < 5
+    , bytestring
+    , text
+    , async
+    , stm
+    , mtl
+    , transformers
+    , resourcet
+    , exceptions
+    , safe-exceptions
+    , lens
+    , aeson
+    , hashable
+    , uuid
+    , transformers-base
+    , monad-control
+    , lifted-base
+    , JuicyPixels
+    , JuicyPixels-scale-dct
+    , servant-JuicyPixels
+    , http-client
+    , http-client-tls
+    , amazonka
+    , amazonka-core
+    , amazonka-s3
+    , servant
+    , servant-server
+    , wai
+    , wai-extra
+    , warp
+  exposed-modules:
+      Imageratops.Api
+      Imageratops.Config
+      Imageratops.Env
+      Imageratops.Monad
+      Imageratops.Prelude
+  default-language: Haskell2010
+
+executable imageratops-server
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  default-extensions: DataKinds DeriveGeneric DeriveFunctor FlexibleContexts FlexibleInstances GADTs KindSignatures LambdaCase LambdaCase MultiParamTypeClasses NoImplicitPrelude NoMonomorphismRestriction PartialTypeSignatures PatternSynonyms PolyKinds RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeApplications TypeFamilies TypeOperators ViewPatterns
+  build-depends:
+      base >= 4.7 && < 5
+    , bytestring
+    , text
+    , async
+    , stm
+    , mtl
+    , transformers
+    , resourcet
+    , exceptions
+    , safe-exceptions
+    , lens
+    , aeson
+    , hashable
+    , uuid
+    , transformers-base
+    , monad-control
+    , lifted-base
+    , JuicyPixels
+    , JuicyPixels-scale-dct
+    , servant-JuicyPixels
+    , http-client
+    , http-client-tls
+    , amazonka
+    , amazonka-core
+    , amazonka-s3
+    , servant
+    , servant-server
+    , wai
+    , wai-extra
+    , warp
+    , imageratops
+  default-language: Haskell2010
