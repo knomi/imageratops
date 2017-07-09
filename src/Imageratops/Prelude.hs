@@ -3,16 +3,16 @@ module Imageratops.Prelude
   , module Imageratops.Prelude
   ) where
 
-import           Prelude                      as X
+import Prelude as X
 
-import           Control.Applicative          as X
-import           Control.Category             as X (Category, (<<<), (>>>))
-import           Control.Exception.Safe       as X
+import Control.Applicative          as X
+import Control.Category             as X (Category, (<<<), (>>>))
+import Control.Exception.Safe       as X
   (bracket, bracket_, catch, handle, throwM, throwString, try)
-import           Control.Lens                 as X
+import Control.Lens                 as X
   (Lens, Lens', lens, makeLenses, over, set, view, (.~), (?~), (^.))
-import           Control.Monad.Catch          as X (MonadCatch(), MonadThrow())
-import           Control.Monad.Except         as X
+import Control.Monad.Catch          as X (MonadCatch(), MonadThrow())
+import Control.Monad.Except         as X
   ( Except
   , ExceptT(..)
   , MonadError(catchError, throwError)
@@ -23,8 +23,8 @@ import           Control.Monad.Except         as X
   , withExcept
   , withExceptT
   )
-import           Control.Monad.IO.Class       as X (MonadIO(liftIO))
-import           Control.Monad.Reader         as X
+import Control.Monad.IO.Class       as X (MonadIO(liftIO))
+import Control.Monad.Reader         as X
   ( MonadReader(ask)
   , Reader
   , ReaderT(..)
@@ -34,10 +34,10 @@ import           Control.Monad.Reader         as X
   , runReader
   , runReaderT
   )
-import           Control.Monad.Trans.Class    as X (MonadTrans(lift))
-import           Control.Monad.Trans.Resource as X
+import Control.Monad.Trans.Class    as X (MonadTrans(lift))
+import Control.Monad.Trans.Resource as X
   (MonadResource(..), ResourceT, runResourceT)
-import           Control.Monad.Writer         as X
+import Control.Monad.Writer         as X
   ( MonadWriter(tell)
   , Writer
   , WriterT(..)
@@ -46,18 +46,17 @@ import           Control.Monad.Writer         as X
   , runWriter
   , runWriterT
   )
-import           Data.Aeson                   as X (FromJSON(..), ToJSON(..))
-import           Data.Bifunctor               as X
-  (Bifunctor(..), first, second)
-import           Data.ByteString              as X (ByteString)
-import           Data.Function                as X ((&))
-import           Data.Maybe                   as X
-  (fromMaybe, isJust, isNothing)
-import           Data.Monoid                  as X ((<>))
-import           Data.Proxy                   as X (Proxy(Proxy))
-import           Data.String                  as X (IsString(..))
-import           Data.Text                    as X (Text)
-import           Text.Read                    as X (readEither, readMaybe)
+import Data.Aeson                   as X (FromJSON(..), ToJSON(..))
+import Data.Bifunctor               as X (Bifunctor(..), first, second)
+import Data.ByteString              as X (ByteString)
+import Data.Function                as X ((&))
+import Data.Maybe                   as X (fromMaybe, isJust, isNothing)
+import Data.Monoid                  as X ((<>))
+import Data.Proxy                   as X (Proxy(Proxy))
+import Data.String                  as X (IsString(..))
+import Data.Text                    as X (Text)
+import GHC.TypeLits                 as X
+import Text.Read                    as X (readEither, readMaybe)
 
 import qualified Data.ByteString.Lazy
 

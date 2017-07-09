@@ -58,6 +58,7 @@ library
       Imageratops.Api
       Imageratops.Config
       Imageratops.Env
+      Imageratops.ImageBody
       Imageratops.Monad
       Imageratops.Prelude
       Servant.OptionalReqBody
