@@ -50,10 +50,14 @@ import           Data.Aeson                   as X (FromJSON(..), ToJSON(..))
 import           Data.Bifunctor               as X
   (Bifunctor(..), first, second)
 import           Data.ByteString              as X (ByteString)
+import           Data.Function                as X ((&))
+import           Data.Maybe                   as X
+  (fromMaybe, isJust, isNothing)
 import           Data.Monoid                  as X ((<>))
 import           Data.Proxy                   as X (Proxy(Proxy))
 import           Data.String                  as X (IsString(..))
 import           Data.Text                    as X (Text)
+import           Text.Read                    as X (readEither, readMaybe)
 
 import qualified Data.ByteString.Lazy
 

@@ -15,6 +15,14 @@ steps:
   #     # true.
   #     add_language_pragma: true
 
+  # Align the right hand side of some elements.  This is quite conservative
+  # and only applies to statements where each element occupies a single
+  # line.
+  - simple_align:
+      cases: false
+      top_level_patterns: false
+      records: true
+
   # Import cleanup
   - imports:
       # There are different ways we can align names and lists.
@@ -31,7 +39,7 @@ steps:
       # - none: Do not perform any alignment.
       #
       # Default: global.
-      align: global
+      align: group
 
       # Folowing options affect only import list alignment.
       #
@@ -53,7 +61,7 @@ steps:
       #   > import qualified Data.List      as List
       #   >     (concat, foldl, foldr, head, init, last, length)
       #
-      # Default: after alias
+      # Default: after_alias
       list_align: after_alias
 
       # Long list align style takes effect when import is too long. This is
@@ -123,44 +131,27 @@ steps:
       #
       # Default: true
       align: true
-
-      # stylish-haskell can detect redundancy of some language pragmas. If this
-      # is set to true, it will remove those redundant pragmas. Default: true.
       remove_redundant: true
-
-  # Replace tabs by spaces. This is disabled by default.
-  # - tabs:
-  #     # Number of spaces to use for each tab. Default: 8, as specified by the
-  #     # Haskell report.
-  #     spaces: 8
-
-  # Remove trailing whitespace
   - trailing_whitespace: {}
 
-# A common setting is the number of columns (parts of) code will be wrapped
-# to. Different steps take this into account. Default: 80.
 columns: 80
-
-# Sometimes, language extensions are specified in a cabal file or from the
-# command line instead of using language pragmas in the file. stylish-haskell
-# needs to be aware of these, so it can parse the file correctly.
-#
-# No language extensions are enabled by default.
+newline: lf
 language_extensions:
-   - TemplateHaskell
-   - QuasiQuotes
-   - ScopedTypeVariables    
-   - FlexibleContexts       
-   - FlexibleInstances      
-   - KindSignatures         
-   - DataKinds              
-   - GADTs                  
-   - TypeFamilies           
-   - TypeOperators          
-   - DeriveGeneric          
-   - MultiParamTypeClasses  
-   - PartialTypeSignatures  
-   - RankNTypes             
-   - RecordWildCards        
-   - StandaloneDeriving     
-   - TupleSections          
+- DataKinds
+- DeriveFoldable
+- DeriveFunctor
+- DeriveGeneric
+- FlexibleContexts
+- FlexibleInstances
+- GADTs
+- KindSignatures
+- NoImplicitPrelude
+- RecordWildCards
+- ScopedTypeVariables
+- StandaloneDeriving
+- TypeApplications
+- TypeFamilies
+- TypeOperators
+- MultiParamTypeClasses
+- FunctionalDependencies
+- LambdaCase

@@ -45,6 +45,7 @@ dependencies:
   - servant-server
 
   - wai
+  - http-types
   - wai-extra
   - warp
 
