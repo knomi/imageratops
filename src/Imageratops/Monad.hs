@@ -8,6 +8,7 @@ import           Control.Monad.Trans.Control (MonadBaseControl(..))
 import qualified Network.AWS                 as AWS
 
 import Imageratops.Env
+import Imageratops.Storage as Storage
 
 type Imageratops = ImageratopsT IO
 
@@ -31,7 +32,7 @@ runImageratops env m =
     $ runReaderT (runImageratopsT m) env
 
 instance MonadTrans ImageratopsT where
-  lift = ImageratopsT . lift. lift
+  lift = ImageratopsT . lift . lift
 
 instance (MonadBase IO m) => MonadBase IO (ImageratopsT m) where
   liftBase = liftBaseDefault
@@ -50,3 +51,7 @@ instance AWS.MonadAWS (ImageratopsT IO) where
   liftAWS aws = do
     env <- asks envAwsEnv
     ImageratopsT $ AWS.runAWS env aws
+
+instance Storage.MonadStorage Imageratops where
+  read  = Storage.readFS  "/tmp/imageratops/"
+  write = Storage.writeFS "/tmp/imageratops/"

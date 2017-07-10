@@ -9,7 +9,7 @@ import Control.Applicative          as X
 import Control.Category             as X (Category, (<<<), (>>>))
 import Control.DeepSeq              as X (NFData, deepseq, ($!!))
 import Control.Exception.Safe       as X
-  (bracket, bracket_, catch, handle, throwM, throwString, try)
+  (Exception, bracket, bracket_, catch, handle, throwM, throwString, try)
 import Control.Lens                 as X
   (Lens, Lens', lens, makeLenses, over, set, view, (.~), (?~), (^.))
 import Control.Monad.Catch          as X (MonadCatch(), MonadThrow())
@@ -59,6 +59,7 @@ import Data.String                  as X (IsString(..))
 import Data.Text                    as X (Text)
 import Data.UUID                    as X (UUID)
 import GHC.TypeLits                 as X
+import Network.AWS                  as X (MonadAWS)
 import Text.Read                    as X (readEither, readMaybe)
 
 import qualified Data.ByteString.Lazy

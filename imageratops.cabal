@@ -25,6 +25,7 @@ library
   build-depends:
       base >= 4.7 && < 5
     , bytestring
+    , filepath
     , text
     , async
     , stm
@@ -64,11 +65,13 @@ library
       Imageratops.Api
       Imageratops.Config
       Imageratops.Env
+      Imageratops.Error
       Imageratops.Image
       Imageratops.ImageBody
       Imageratops.ImageId
       Imageratops.Monad
       Imageratops.Prelude
+      Imageratops.Storage
       Servant.OptionalReqBody
   default-language: Haskell2010
 
@@ -81,6 +84,7 @@ executable imageratops-server
   build-depends:
       base >= 4.7 && < 5
     , bytestring
+    , filepath
     , text
     , async
     , stm

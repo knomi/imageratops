@@ -17,8 +17,15 @@ import Imageratops.Image
 newtype ImageId = ImageId { runImageId :: UUID }
   deriving (Show, Eq, Ord, Read, NFData, Hashable)
 
+toText :: ImageId -> Text
+toText = UUID.toText . runImageId
+
+toString :: ImageId -> String
+toString = UUID.toString . runImageId
+
+
 instance ToJSON ImageId where
-  toJSON = toJSON . UUID.toText . runImageId
+  toJSON = toJSON . toText
 
 instance FromJSON ImageId where
   parseJSON json = do
