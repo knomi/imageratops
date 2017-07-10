@@ -64,6 +64,7 @@ library
       Imageratops.Api
       Imageratops.Config
       Imageratops.Env
+      Imageratops.Image
       Imageratops.ImageBody
       Imageratops.ImageId
       Imageratops.Monad

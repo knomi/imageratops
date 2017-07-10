@@ -1,13 +1,13 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Imageratops.Monad where
 
-import           Imageratops.Prelude
+import Imageratops.Prelude
 
 import           Control.Monad.Base          (MonadBase(..), liftBaseDefault)
 import           Control.Monad.Trans.Control (MonadBaseControl(..))
 import qualified Network.AWS                 as AWS
 
-import           Imageratops.Env
+import Imageratops.Env
 
 type Imageratops = ImageratopsT IO
 
@@ -50,5 +50,3 @@ instance AWS.MonadAWS (ImageratopsT IO) where
   liftAWS aws = do
     env <- asks envAwsEnv
     ImageratopsT $ AWS.runAWS env aws
-
-

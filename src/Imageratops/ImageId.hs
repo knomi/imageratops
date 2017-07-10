@@ -12,6 +12,8 @@ import qualified Data.UUID            as UUID
 import qualified Data.UUID.V5         as UUID.V5
 import qualified Data.Vector.Storable as Vector
 
+import Imageratops.Image
+
 newtype ImageId = ImageId { runImageId :: UUID }
   deriving (Show, Eq, Ord, Read, NFData, Hashable)
 
@@ -25,7 +27,7 @@ instance FromJSON ImageId where
       Nothing   -> fail "ImageId: expected a valid UUID"
       Just uuid -> pure $ ImageId uuid
 
-fromImage :: Picture.DynamicImage -> ImageId
+fromImage :: Image -> ImageId
 fromImage =
   ImageId
     -- 'generateNamed' performs poorly if feeded with a lot of data
@@ -36,3 +38,4 @@ fromImage =
     -- nicely
     . ByteString.unpack . SHA1.hashlazy . ByteString.Lazy.pack . Vector.toList
     . Picture.imageData . Picture.convertRGBA8
+    . runImage
