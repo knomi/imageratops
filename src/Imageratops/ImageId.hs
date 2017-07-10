@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings          #-}
 module Imageratops.ImageId where
 
 import Imageratops.Prelude
@@ -23,6 +24,12 @@ toText = UUID.toText . runImageId
 toString :: ImageId -> String
 toString = UUID.toString . runImageId
 
+instance FromHttpApiData ImageId where
+  parseUrlPiece piece = do
+    text <- parseUrlPiece piece
+    case UUID.fromText text of
+      Nothing   -> throwError "ImageId: Not a valid UUID"
+      Just uuid -> pure $ ImageId uuid
 
 instance ToJSON ImageId where
   toJSON = toJSON . toText

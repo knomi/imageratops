@@ -3,60 +3,49 @@ module Imageratops.Api where
 
 import Imageratops.Prelude
 
-import           Data.Text                (Text)
-import           Servant
-import           Servant.JuicyPixels      (BMP, GIF, JPEG, PNG)
-import           Servant.OptionalReqBody  (OptionalReqBody)
-import qualified Vision.Image             as Friday
-import qualified Vision.Image.JuicyPixels as Friday
-import qualified Vision.Primitive         as Friday
+import Servant
+import Servant.JuicyPixels (BMP, GIF, JPEG, PNG)
 
 import           Imageratops.Image     (Image(..))
 import qualified Imageratops.Image     as Image
-import           Imageratops.ImageBody (ImageBody(..))
+import           Imageratops.ImageBody (ImageBody)
 import qualified Imageratops.ImageBody as ImageBody
 import           Imageratops.ImageId   (ImageId)
 import qualified Imageratops.ImageId   as ImageId
 import           Imageratops.Monad
+import           Imageratops.Storage   as Storage
 
 type InputTypes  = [JPEG 100, PNG, BMP, GIF, OctetStream]
 type OutputTypes = [JPEG 100, PNG, BMP, GIF]
 
 type Api =
-  "id"
-    :> ReqBody InputTypes ImageBody
-    :> Post '[JSON] ImageId
-    :<|>
-  "convert"
-    :> ReqBody InputTypes ImageBody
-    :> Post OutputTypes Image
-    :<|>
-  "scale"
-    :> ReqBody InputTypes ImageBody
+  Capture "image-id" ImageId
     :> QueryParam "width"  Int
     :> QueryParam "height" Int
-    :> Post OutputTypes Image
+    :> Get OutputTypes Image
+  :<|>
+  ReqBody InputTypes ImageBody
+    :> Post '[JSON] ImageId
 
 server :: ServerT Api Imageratops
 server =
-  identify
+  getImage
     :<|>
-  convert
-    :<|>
-  scale
+  addImage
   where
-    identify imageBody =
-      pure $ ImageId.fromImage $ ImageBody.toImage imageBody
+    getImage :: ImageId -> Maybe Int -> Maybe Int -> Imageratops Image
+    getImage imageId width height = do
+      imageBody <- Storage.read imageId
+      let image = ImageBody.toImage imageBody
+      pure $ maybe image (`Image.scale` image) size
+      where
+        size =
+         (Image.WidthHeight <$> width <*> height)
+           <|>
+         (Image.Width <$> width)
+           <|>
+         (Image.Height <$> height)
 
-    convert imageBody =
-      pure $ ImageBody.toImage imageBody
-
-    scale imageBody mw mh =
-      imageBody
-        & ImageBody.toImage
-        & case (mw, mh) of
-            (Just w, Just h)  -> Image.scale $ Image.WidthHeight w h
-            (Just w, Nothing) -> Image.scale $ Image.Width w
-            (Nothing, Just h) -> Image.scale $ Image.Height h
-            _ -> id
-        & pure
+    addImage :: ImageBody -> Imageratops ImageId
+    addImage imageBody = do
+      Storage.write imageBody

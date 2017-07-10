@@ -54,6 +54,7 @@ dependencies:
 
 - wai
 - http-types
+- http-api-data
 - wai-extra
 - warp
 

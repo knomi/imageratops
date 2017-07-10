@@ -61,6 +61,8 @@ import Data.UUID                    as X (UUID)
 import GHC.TypeLits                 as X
 import Network.AWS                  as X (MonadAWS)
 import Text.Read                    as X (readEither, readMaybe)
+import Web.HttpApiData              as X
+  (FromHttpApiData(..), ToHttpApiData(..))
 
 import qualified Data.ByteString.Lazy
 

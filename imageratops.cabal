@@ -59,6 +59,7 @@ library
     , servant-server
     , wai
     , http-types
+    , http-api-data
     , wai-extra
     , warp
   exposed-modules:
@@ -118,6 +119,7 @@ executable imageratops-server
     , servant-server
     , wai
     , http-types
+    , http-api-data
     , wai-extra
     , warp
     , imageratops
