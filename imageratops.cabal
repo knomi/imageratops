@@ -40,9 +40,15 @@ library
     , transformers-base
     , monad-control
     , lifted-base
+    , deepseq
+    , vector
+    , cryptohash
     , JuicyPixels
+    , JuicyPixels-extra
     , JuicyPixels-scale-dct
     , servant-JuicyPixels
+    , friday
+    , friday-juicypixels
     , http-client
     , http-client-tls
     , amazonka
@@ -59,6 +65,7 @@ library
       Imageratops.Config
       Imageratops.Env
       Imageratops.ImageBody
+      Imageratops.ImageId
       Imageratops.Monad
       Imageratops.Prelude
       Servant.OptionalReqBody
@@ -69,6 +76,7 @@ executable imageratops-server
   hs-source-dirs:
       app
   default-extensions: DataKinds DeriveGeneric DeriveFunctor FlexibleContexts FlexibleInstances GADTs KindSignatures LambdaCase LambdaCase MultiParamTypeClasses NoImplicitPrelude NoMonomorphismRestriction PartialTypeSignatures PatternSynonyms PolyKinds RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeApplications TypeFamilies TypeOperators ViewPatterns
+  ghc-options: -Wall -threaded
   build-depends:
       base >= 4.7 && < 5
     , bytestring
@@ -87,9 +95,15 @@ executable imageratops-server
     , transformers-base
     , monad-control
     , lifted-base
+    , deepseq
+    , vector
+    , cryptohash
     , JuicyPixels
+    , JuicyPixels-extra
     , JuicyPixels-scale-dct
     , servant-JuicyPixels
+    , friday
+    , friday-juicypixels
     , http-client
     , http-client-tls
     , amazonka

@@ -1,6 +1,10 @@
 resolver: nightly-2017-07-06
 packages:
 - '.'
-extra-deps: []
+extra-deps:
+- blockhash-0.1.0.0
+- friday-0.2.3.1
+- friday-juicypixels-0.1.2.1
+- ratio-int-0.1.2
 flags: {}
 extra-package-dbs: []

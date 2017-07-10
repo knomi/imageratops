@@ -7,6 +7,7 @@ import Prelude as X
 
 import Control.Applicative          as X
 import Control.Category             as X (Category, (<<<), (>>>))
+import Control.DeepSeq              as X (NFData, deepseq, ($!!))
 import Control.Exception.Safe       as X
   (bracket, bracket_, catch, handle, throwM, throwString, try)
 import Control.Lens                 as X
@@ -50,11 +51,13 @@ import Data.Aeson                   as X (FromJSON(..), ToJSON(..))
 import Data.Bifunctor               as X (Bifunctor(..), first, second)
 import Data.ByteString              as X (ByteString)
 import Data.Function                as X ((&))
+import Data.Hashable                as X (Hashable)
 import Data.Maybe                   as X (fromMaybe, isJust, isNothing)
 import Data.Monoid                  as X ((<>))
 import Data.Proxy                   as X (Proxy(Proxy))
 import Data.String                  as X (IsString(..))
 import Data.Text                    as X (Text)
+import Data.UUID                    as X (UUID)
 import GHC.TypeLits                 as X
 import Text.Read                    as X (readEither, readMaybe)
 

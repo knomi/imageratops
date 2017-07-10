@@ -12,42 +12,49 @@ extra-source-files:
 - README.md
 
 dependencies:
-  - base >= 4.7 && < 5
-  - bytestring
-  - text
-  - async
-  - stm
-  - mtl
-  - transformers
-  - resourcet
-  - exceptions
-  - safe-exceptions
-  - lens
-  - aeson
-  - hashable
-  - uuid
-  - transformers-base
-  - monad-control
-  - lifted-base
+- base >= 4.7 && < 5
+- bytestring
+- text
+- async
+- stm
+- mtl
+- transformers
+- resourcet
+- exceptions
+- safe-exceptions
+- lens
+- aeson
+- hashable
+- uuid
+- transformers-base
+- monad-control
+- lifted-base
+- deepseq
+- vector
+- cryptohash
+#- blockhash
 
-  - JuicyPixels
-  - JuicyPixels-scale-dct
-  - servant-JuicyPixels
+- JuicyPixels
+- JuicyPixels-extra
+- JuicyPixels-scale-dct
+- servant-JuicyPixels
+- friday
+- friday-juicypixels
 
-  - http-client
-  - http-client-tls
+- http-client
+- http-client-tls
 
-  - amazonka
-  - amazonka-core
-  - amazonka-s3
+- amazonka
+- amazonka-core
+- amazonka-s3
 
-  - servant
-  - servant-server
+- servant
+- servant-server
 
-  - wai
-  - http-types
-  - wai-extra
-  - warp
+- wai
+- http-types
+- wai-extra
+- warp
 
 default-extensions:
 - DataKinds
@@ -85,3 +92,6 @@ executables:
     source-dirs:      app
     main:             Main.hs
     dependencies:     imageratops
+    ghc-options:
+    - -Wall
+    - -threaded
