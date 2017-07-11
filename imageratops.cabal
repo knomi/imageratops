@@ -60,6 +60,7 @@ library
     , wai
     , http-types
     , http-api-data
+    , network-uri
     , wai-extra
     , warp
   exposed-modules:
@@ -67,6 +68,7 @@ library
       Imageratops.Config
       Imageratops.Env
       Imageratops.Error
+      Imageratops.Fetch
       Imageratops.Image
       Imageratops.ImageBody
       Imageratops.ImageId
@@ -81,7 +83,7 @@ executable imageratops-server
   hs-source-dirs:
       app
   default-extensions: DataKinds DeriveGeneric DeriveFunctor FlexibleContexts FlexibleInstances GADTs KindSignatures LambdaCase LambdaCase MultiParamTypeClasses NoImplicitPrelude NoMonomorphismRestriction PartialTypeSignatures PatternSynonyms PolyKinds RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeApplications TypeFamilies TypeOperators ViewPatterns
-  ghc-options: -Wall -threaded
+  ghc-options: -Wall -threaded -with-rtsopts=-N
   build-depends:
       base >= 4.7 && < 5
     , bytestring
@@ -120,6 +122,7 @@ executable imageratops-server
     , wai
     , http-types
     , http-api-data
+    , network-uri
     , wai-extra
     , warp
     , imageratops

@@ -55,6 +55,7 @@ dependencies:
 - wai
 - http-types
 - http-api-data
+- network-uri
 - wai-extra
 - warp
 
@@ -97,3 +98,4 @@ executables:
     ghc-options:
     - -Wall
     - -threaded
+    - -with-rtsopts=-N

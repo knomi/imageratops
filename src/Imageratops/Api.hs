@@ -4,8 +4,10 @@ module Imageratops.Api where
 import Imageratops.Prelude
 
 import Servant
-import Servant.JuicyPixels (BMP, GIF, JPEG, PNG)
+import Servant.JuicyPixels     (BMP, GIF, JPEG, PNG)
+import Servant.OptionalReqBody
 
+import qualified Imageratops.Fetch     as Fetch
 import           Imageratops.Image     (Image(..))
 import qualified Imageratops.Image     as Image
 import           Imageratops.ImageBody (ImageBody)
@@ -24,7 +26,8 @@ type Api =
     :> QueryParam "height" Int
     :> Get OutputTypes Image
   :<|>
-  ReqBody InputTypes ImageBody
+  OptionalReqBody InputTypes ImageBody
+    :> QueryParam "url" Fetch.Url
     :> Post '[JSON] ImageId
 
 server :: ServerT Api Imageratops
@@ -46,6 +49,10 @@ server =
            <|>
          (Image.Height <$> height)
 
-    addImage :: ImageBody -> Imageratops ImageId
-    addImage imageBody = do
+    addImage :: Maybe ImageBody -> Maybe Fetch.Url -> Imageratops ImageId
+    addImage (Just imageBody) _ = do
       Storage.write imageBody
+    addImage _ (Just url) = do
+      imageBody <- Fetch.fromUrl url
+      addImage (Just imageBody) (Just url)
+

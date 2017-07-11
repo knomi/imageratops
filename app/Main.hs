@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Imageratops.Prelude
+import Imageratops.Prelude
 
 import qualified Network.AWS                          as AWS
 import qualified Network.Wai                          as Wai
@@ -11,10 +11,10 @@ import           Servant                              ((:~>))
 import qualified Servant                              as Servant
 import           System.IO                            (stderr)
 
-import           Imageratops.Api                      (Api, server)
-import           Imageratops.Config
-import           Imageratops.Env
-import           Imageratops.Monad
+import Imageratops.Api    (Api, server)
+import Imageratops.Config
+import Imageratops.Env
+import Imageratops.Monad
 
 main :: IO ()
 main = do
