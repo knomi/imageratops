@@ -1,7 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module Imageratops.ImageBody
   ( ImageBody
-  , imageBody
+  , fromByteString
   , toImage
   , toByteString
   ) where
@@ -10,6 +10,7 @@ import Imageratops.Prelude
 
 import qualified Codec.Picture        as JP
 import qualified Data.ByteString.Lazy as LByteString
+import qualified Data.Text            as Text
 import qualified Servant
 
 import Imageratops.Image
@@ -27,11 +28,13 @@ toImage = image
 toByteString :: ImageBody -> LByteString
 toByteString = bytestring
 
-imageBody :: (MonadError String m) => LByteString -> m ImageBody
-imageBody bs = do
-  image <- either throwError (pure . Image)
+fromByteString :: (MonadError Text m) => LByteString -> m ImageBody
+fromByteString bs = do
+  image <- either (throwError . Text.pack) (pure . Image)
              $ JP.decodeImage $ LByteString.toStrict bs
   pure $ ImageBody image bs
+
+
 
 instance
   ( Servant.Accept contentType
@@ -40,4 +43,4 @@ instance
   where
   mimeUnrender contentType bytestring = do
     image <- Servant.mimeUnrender contentType bytestring
-    pure $ ImageBody {..}
+    pure $ ImageBody{..}

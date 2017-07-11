@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings          #-}
 module Imageratops.Monad where
 
 import Imageratops.Prelude
@@ -37,7 +38,7 @@ instance MonadTrans ImageratopsT where
 instance (MonadBase IO m) => MonadBase IO (ImageratopsT m) where
   liftBase = liftBaseDefault
 
-deriving instance (MonadResource m) => MonadResource (ImageratopsT m)
+deriving instance MonadResource Imageratops
 
 instance MonadBaseControl IO (ImageratopsT IO) where
   type StM (ImageratopsT IO) a = StM IO a
@@ -53,5 +54,5 @@ instance AWS.MonadAWS (ImageratopsT IO) where
     ImageratopsT $ AWS.runAWS env aws
 
 instance Storage.MonadStorage Imageratops where
-  read  = Storage.readFS  "/tmp/imageratops/"
-  write = Storage.writeFS "/tmp/imageratops/"
+  read  = Storage.readS3  "knomi-images"
+  write = Storage.writeS3 "knomi-images"

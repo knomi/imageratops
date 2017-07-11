@@ -20,10 +20,15 @@ main :: IO ()
 main = do
   logger <- AWS.newLogger AWS.Debug stderr
   awsEnv <- AWS.newEnv AWS.Discover
+  let envAwsEnv = awsEnv
+        & AWS.envRegion .~ AWS.Ireland
+        & AWS.envLogger .~ logger
+      envConfig = Config
   Warp.run 8080
     $ Wai.logStdoutDev
     $ app
-    $ Env { envAwsEnv = awsEnv, envConfig = Config }
+    $ Env{..}
+
 
 app :: Env -> Wai.Application
 app env =

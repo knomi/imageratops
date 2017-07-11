@@ -50,6 +50,8 @@ library
     , servant-JuicyPixels
     , friday
     , friday-juicypixels
+    , conduit
+    , conduit-combinators
     , http-client
     , http-client-tls
     , amazonka
@@ -112,6 +114,8 @@ executable imageratops-server
     , servant-JuicyPixels
     , friday
     , friday-juicypixels
+    , conduit
+    , conduit-combinators
     , http-client
     , http-client-tls
     , amazonka

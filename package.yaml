@@ -42,6 +42,9 @@ dependencies:
 - friday
 - friday-juicypixels
 
+- conduit
+- conduit-combinators
+
 - http-client
 - http-client-tls
 
