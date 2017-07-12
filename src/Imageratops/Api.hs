@@ -21,6 +21,8 @@ type InputTypes  = [JPEG 100, PNG, BMP, GIF, OctetStream]
 type OutputTypes = [JPEG 100, PNG, BMP, GIF]
 
 type Api =
+  "_status" :> Get '[JSON] Text
+  :<|>
   Capture "image-id" ImageId
     :> QueryParam "width"  Int
     :> QueryParam "height" Int
@@ -32,10 +34,15 @@ type Api =
 
 server :: ServerT Api Imageratops
 server =
+  getStatus
+    :<|>
   getImage
     :<|>
   addImage
   where
+    getStatus :: Imageratops Text
+    getStatus = pure "We are fine"
+
     getImage :: ImageId -> Maybe Int -> Maybe Int -> Imageratops Image
     getImage imageId width height = do
       imageBody <- Storage.read imageId
