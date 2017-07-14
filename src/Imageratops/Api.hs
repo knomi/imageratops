@@ -26,6 +26,7 @@ type Api =
   Capture "image-id" ImageId
     :> QueryParam "width"  Int
     :> QueryParam "height" Int
+    :> QueryParam "fit"  Image.Fit
     :> Get OutputTypes Image
   :<|>
   OptionalReqBody InputTypes ImageBody
@@ -43,14 +44,16 @@ server =
     getStatus :: Imageratops Text
     getStatus = pure "We are fine"
 
-    getImage :: ImageId -> Maybe Int -> Maybe Int -> Imageratops Image
-    getImage imageId width height = do
+    getImage
+      :: ImageId -> Maybe Int -> Maybe Int -> Maybe Image.Fit
+      -> Imageratops Image
+    getImage imageId width height (fromMaybe Image.Cover -> fit) = do
       imageBody <- Storage.read imageId
       let image = ImageBody.toImage imageBody
       pure $ maybe image (`Image.scale` image) size
       where
         size =
-         (Image.WidthHeight <$> width <*> height)
+         (Image.WidthHeight fit <$> width <*> height)
            <|>
          (Image.Width <$> width)
            <|>
