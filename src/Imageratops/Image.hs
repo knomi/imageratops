@@ -1,10 +1,12 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings          #-}
 module Imageratops.Image where
 
 import Imageratops.Prelude
 
 import qualified Control.Exception
 import qualified Data.ByteString.Lazy       as ByteString.Lazy
+import qualified Data.Text                  as Text
 import qualified Servant
 import           Servant.JuicyPixels        as Servant
   (BMP, GIF, JPEG, PNG, RADIANCE, TGA, TIFF)
@@ -25,7 +27,6 @@ fromByteString format =
   either (throwM . Error.ImageDecodingFailed) (pure . Image)
     . Friday.loadBS format
     . ByteString.Lazy.toStrict
-
 
 instance Servant.MimeUnrender Servant.OctetStream Image where
   mimeUnrender _ = fridayUnrender Friday.Autodetect
@@ -88,10 +89,21 @@ fridayRender format =
     . Friday.saveBS format
     . runImage
 
+-- | Specifies how the image should match the box.
+data Fit
+  = Contain
+  | Cover
+  deriving (Show, Eq, Ord)
+
+instance FromHttpApiData Fit where
+  parseQueryParam (Text.toLower -> "cover")   = pure Cover
+  parseQueryParam (Text.toLower -> "contain") = pure Contain
+  parseQueryParam _ = throwError "FitBy: expected 'cover' or 'contain'"
+
 data ScaleTo
   = Width  Int
   | Height Int
-  | WidthHeight Int Int
+  | WidthHeight Fit Int Int
   deriving (Show, Eq, Ord)
 
 scale :: ScaleTo -> Image -> Image
@@ -100,29 +112,40 @@ scale size (Friday.convert . runImage -> image :: Friday.RGBA) =
     $ Friday.convert . Friday.manifest
     $ Friday.resize Friday.Bilinear
         (Friday.ix2 (floor scaledHeight) (floor scaledWidth))
-    $ Friday.delayed . Friday.crop rect
+    $ (if cropping
+       then Friday.delayed . Friday.crop rect
+       else Friday.convert)
     $ image
   where
+    cropping =
+      case size of
+        WidthHeight Cover _ _ -> True
+        _ -> False
+
     (scaledWidth, scaledHeight) =
       case size of
-        Width       w   -> (toDouble w, toDouble w * srcRatio)
-        Height        h -> (toDouble h / srcRatio, toDouble h)
-        WidthHeight w h -> (toDouble w, toDouble h)
+        WidthHeight Cover w h -> (d w, d h)
+        WidthHeight Contain w h ->
+          let scalingFactor = min (d w / d imageWidth) (d h / d imageHeight) in
+            (d imageWidth * scalingFactor, d imageHeight * scalingFactor)
+
+        Width  w -> (d w, d w * srcRatio)
+        Height h -> (d h / srcRatio, d h)
 
     Z :. imageHeight :. imageWidth =
       Friday.shape image
 
-    srcRatio    = toDouble imageHeight / toDouble imageWidth
+    srcRatio    = d imageHeight / d imageWidth
     targetRatio = scaledHeight / scaledWidth
 
     cropWidth
-      | WidthHeight w h <- size =
-          floor $ (toDouble imageHeight / toDouble h) * toDouble w
+      | WidthHeight _ w h <- size =
+          floor $ (d imageHeight / d h) * d w
       | otherwise = imageWidth
 
     cropHeight
-      | WidthHeight w h <- size =
-          floor $ (toDouble imageWidth / toDouble w) * toDouble h
+      | WidthHeight _ w h <- size =
+          floor $ (d imageWidth / d w) * d h
       | otherwise = imageHeight
 
     rect
@@ -139,5 +162,5 @@ scale size (Friday.convert . runImage -> image :: Friday.RGBA) =
           , rHeight = cropHeight
           }
 
-    toDouble :: Int -> Double
-    toDouble = fromIntegral
+    d :: Int -> Double
+    d = fromIntegral
