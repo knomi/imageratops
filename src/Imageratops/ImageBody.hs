@@ -8,12 +8,11 @@ module Imageratops.ImageBody
 
 import Imageratops.Prelude
 
-import qualified Codec.Picture        as JP
-import qualified Data.ByteString.Lazy as LByteString
-import qualified Data.Text            as Text
 import qualified Servant
+import qualified Vision.Image.Storage.DevIL as Friday
 
-import Imageratops.Image
+import           Imageratops.Image (Image)
+import qualified Imageratops.Image as Image
 
 -- | An image along with the original bytestring from which that image
 --   was decoded.
@@ -28,13 +27,10 @@ toImage = image
 toByteString :: ImageBody -> LByteString
 toByteString = bytestring
 
-fromByteString :: (MonadError Text m) => LByteString -> m ImageBody
+fromByteString :: (MonadThrow m) => LByteString -> m ImageBody
 fromByteString bs = do
-  image <- either (throwError . Text.pack) (pure . Image)
-             $ JP.decodeImage $ LByteString.toStrict bs
+  image <- Image.fromByteString Friday.Autodetect bs
   pure $ ImageBody image bs
-
-
 
 instance
   ( Servant.Accept contentType

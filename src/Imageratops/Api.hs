@@ -13,12 +13,11 @@ import qualified Imageratops.Image     as Image
 import           Imageratops.ImageBody (ImageBody)
 import qualified Imageratops.ImageBody as ImageBody
 import           Imageratops.ImageId   (ImageId)
-import qualified Imageratops.ImageId   as ImageId
 import           Imageratops.Monad
 import           Imageratops.Storage   as Storage
 
 type InputTypes  = [JPEG 100, PNG, BMP, GIF, OctetStream]
-type OutputTypes = [JPEG 100, PNG, BMP, GIF]
+type OutputTypes = [JPEG 100, PNG, BMP]
 
 type Api =
   Capture "image-id" ImageId

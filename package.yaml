@@ -41,6 +41,7 @@ dependencies:
 - servant-JuicyPixels
 - friday
 - friday-juicypixels
+- friday-devil
 
 - conduit
 - conduit-combinators
