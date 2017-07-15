@@ -68,10 +68,12 @@ library
     , warp
   exposed-modules:
       Imageratops.Api
+      Imageratops.Api.QueryParams
       Imageratops.Config
       Imageratops.Env
       Imageratops.Error
       Imageratops.Fetch
+      Imageratops.Geometry
       Imageratops.Image
       Imageratops.ImageBody
       Imageratops.ImageId

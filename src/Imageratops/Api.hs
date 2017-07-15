@@ -7,14 +7,16 @@ import Servant
 import Servant.JuicyPixels     (BMP, GIF, JPEG, PNG)
 import Servant.OptionalReqBody
 
-import qualified Imageratops.Fetch     as Fetch
-import           Imageratops.Image     (Image(..))
-import qualified Imageratops.Image     as Image
-import           Imageratops.ImageBody (ImageBody)
-import qualified Imageratops.ImageBody as ImageBody
-import           Imageratops.ImageId   (ImageId)
+import           Imageratops.Api.QueryParams as QueryParams
+import qualified Imageratops.Fetch           as Fetch
+import           Imageratops.Geometry        as Geometry
+import           Imageratops.Image           (Image(..))
+import qualified Imageratops.Image           as Image
+import           Imageratops.ImageBody       (ImageBody)
+import qualified Imageratops.ImageBody       as ImageBody
+import           Imageratops.ImageId         (ImageId)
 import           Imageratops.Monad
-import           Imageratops.Storage   as Storage
+import           Imageratops.Storage         as Storage
 
 type InputTypes  = [JPEG 100, PNG, BMP, GIF, OctetStream]
 type OutputTypes = [JPEG 100, PNG, BMP]
@@ -23,9 +25,7 @@ type Api =
   "_status" :> Get '[JSON] Text
   :<|>
   Capture "image-id" ImageId
-    :> QueryParam "width"  Int
-    :> QueryParam "height" Int
-    :> QueryParam "fit"  Image.Fit
+    :> QueryParams.FitTo
     :> Get OutputTypes Image
   :<|>
   OptionalReqBody InputTypes ImageBody
@@ -43,20 +43,11 @@ server =
     getStatus :: Imageratops Text
     getStatus = pure "We are fine"
 
-    getImage
-      :: ImageId -> Maybe Int -> Maybe Int -> Maybe Image.Fit
-      -> Imageratops Image
-    getImage imageId width height (fromMaybe Image.Cover -> fit) = do
+    getImage :: ImageId -> Maybe Geometry.FitTo -> Imageratops Image
+    getImage imageId fitTo = do
       imageBody <- Storage.read imageId
       let image = ImageBody.toImage imageBody
-      pure $ maybe image (`Image.scale` image) size
-      where
-        size =
-         (Image.WidthHeight fit <$> width <*> height)
-           <|>
-         (Image.Width <$> width)
-           <|>
-         (Image.Height <$> height)
+      pure $ maybe id Image.scale fitTo image
 
     addImage :: Maybe ImageBody -> Maybe Fetch.Url -> Imageratops ImageId
     addImage (Just imageBody) _ = do

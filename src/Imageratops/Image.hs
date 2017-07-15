@@ -15,7 +15,8 @@ import qualified Vision.Image.Storage.DevIL as Friday
 import           Vision.Primitive           ((:.)(..), Z(..))
 import qualified Vision.Primitive           as Friday
 
-import qualified Imageratops.Error as Error
+import Imageratops.Error    as Error
+import Imageratops.Geometry as Geometry
 
 newtype Image = Image
   { runImage :: Friday.StorageImage }
@@ -89,24 +90,7 @@ fridayRender format =
     . Friday.saveBS format
     . runImage
 
--- | Specifies how the image should match the box.
-data Fit
-  = Contain
-  | Cover
-  deriving (Show, Eq, Ord)
-
-instance FromHttpApiData Fit where
-  parseQueryParam (Text.toLower -> "cover")   = pure Cover
-  parseQueryParam (Text.toLower -> "contain") = pure Contain
-  parseQueryParam _ = throwError "FitBy: expected 'cover' or 'contain'"
-
-data ScaleTo
-  = Width  Int
-  | Height Int
-  | WidthHeight Fit Int Int
-  deriving (Show, Eq, Ord)
-
-scale :: ScaleTo -> Image -> Image
+scale :: FitTo -> Image -> Image
 scale size (Friday.convert . runImage -> image :: Friday.RGBA) =
   Image
     $ Friday.convert . Friday.manifest

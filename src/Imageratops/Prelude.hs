@@ -50,6 +50,7 @@ import Control.Monad.Writer         as X
 import Data.Aeson                   as X (FromJSON(..), ToJSON(..))
 import Data.Bifunctor               as X (Bifunctor(..), first, second)
 import Data.ByteString              as X (ByteString)
+import Data.Foldable                as X (asum)
 import Data.Function                as X ((&))
 import Data.Hashable                as X (Hashable)
 import Data.Maybe                   as X (fromMaybe, isJust, isNothing)
