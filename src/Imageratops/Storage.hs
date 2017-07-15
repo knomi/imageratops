@@ -4,12 +4,10 @@ import Imageratops.Prelude
 
 import qualified Conduit
 import qualified Data.ByteString.Lazy as LByteString
-import qualified Data.Text            as Text
 import qualified Network.AWS          as AWS
 import qualified Network.AWS.S3       as S3
 import           System.FilePath      ((</>))
 
-import qualified Imageratops.Error     as Error
 import           Imageratops.ImageBody (ImageBody)
 import qualified Imageratops.ImageBody as ImageBody
 import           Imageratops.ImageId   (ImageId)
@@ -24,8 +22,7 @@ readFS
   => FilePath -> ImageId -> m ImageBody
 readFS dir imageId = do
   file <- liftIO $ LByteString.readFile filename
-  either (throwM . Error.ImageDecodingFailed) pure
-    (ImageBody.fromByteString file)
+  ImageBody.fromByteString file
   where
     filename = dir </> ImageId.toString imageId
 
@@ -41,8 +38,7 @@ readS3 :: (MonadAWS m, MonadResource m) => S3.BucketName -> ImageId -> m ImageBo
 readS3 bucketName imageId = do
   gors <- AWS.send $ S3.getObject bucketName $ imageKey imageId
   body <- AWS.sinkBody (gors ^. S3.gorsBody) Conduit.sinkLazy
-  either (throwM . Error.ImageDecodingFailed) pure
-    $ ImageBody.fromByteString body
+  ImageBody.fromByteString body
 
 writeS3 :: (MonadAWS m, MonadResource m) => S3.BucketName -> ImageBody -> m ImageId
 writeS3 bucketName imageBody = do

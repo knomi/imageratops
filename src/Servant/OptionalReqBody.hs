@@ -3,9 +3,7 @@ module Servant.OptionalReqBody where
 
 import Imageratops.Prelude
 
-import           Codec.Picture.Types                        as Picture
 import qualified Data.ByteString.Lazy                       as LByteString
-import           Data.Text                                  (Text)
 import qualified Data.Text                                  as Text
 import qualified Data.Text.Encoding                         as Text
 import qualified Network.HTTP.Types.Header                  as Header
@@ -13,8 +11,6 @@ import qualified Network.Wai                                as Wai
 import           Servant
 import           Servant.API.ContentTypes
   (AllCTUnrender, canHandleCTypeH)
-import           Servant.JuicyPixels
-  (BMP, GIF, JPEG, PNG, RADIANCE, TGA, TIFF)
 import           Servant.Server.Internal.RoutingApplication as Routing
 
 data OptionalReqBody cts a

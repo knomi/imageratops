@@ -1,6 +1,10 @@
 resolver: nightly-2017-07-06
 packages:
 - '.'
+- location:
+    git: git@github.com:RaphaelJ/friday-devil.git
+    commit: 73181586307a4db93302bfeb9af9ded615e60a07
+  extra-dep: true
 extra-deps:
 - blockhash-0.1.0.0
 - friday-0.2.3.1

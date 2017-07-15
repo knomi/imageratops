@@ -8,7 +8,6 @@ import           Network.HTTP.Client as Http
 import           Network.URI         (URI)
 import qualified Network.URI         as URI
 
-import Imageratops.Error     as Error
 import Imageratops.ImageBody as ImageBody
 
 newtype Url = Url { runUrl :: URI }
@@ -38,8 +37,7 @@ fromHttpRequest request = do
   manager <- asks getHttpManager
   response <- liftIO $ Http.httpLbs request manager
   let body = Http.responseBody response
-  either (throwM . Error.ImageDecodingFailed) pure
-    (ImageBody.fromByteString body)
+  ImageBody.fromByteString body
 
 --urls <- Text.lines <$> Text.readFile "/home/zudov/images.txt"
 --let postConcurrently = Async.mapConcurrently $ \url -> do { req <- Http.parseRequest "http://localhost:8080"; Http.httpLbs (Http.setQueryString [("url", Just $ Text.encodeUtf8 url)] $ req { Http.method = "POST" }) manager; }

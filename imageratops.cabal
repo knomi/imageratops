@@ -50,6 +50,7 @@ library
     , servant-JuicyPixels
     , friday
     , friday-juicypixels
+    , friday-devil
     , conduit
     , conduit-combinators
     , http-client
@@ -114,6 +115,7 @@ executable imageratops-server
     , servant-JuicyPixels
     , friday
     , friday-juicypixels
+    , friday-devil
     , conduit
     , conduit-combinators
     , http-client
