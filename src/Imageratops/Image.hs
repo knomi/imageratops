@@ -6,7 +6,7 @@ import Imageratops.Prelude
 
 import qualified Control.Exception
 import qualified Data.ByteString.Lazy       as ByteString.Lazy
-import qualified Data.Text                  as Text
+import           Data.Ratio                 ((%))
 import qualified Servant
 import           Servant.JuicyPixels        as Servant
   (BMP, GIF, JPEG, PNG, RADIANCE, TGA, TIFF)
@@ -110,7 +110,7 @@ scale size (Friday.convert . runImage -> image :: Friday.RGBA) =
       case size of
         WidthHeight Cover w h -> (d w, d h)
         WidthHeight Contain w h ->
-          let scalingFactor = min (d w / d imageWidth) (d h / d imageHeight) in
+          let scalingFactor = min (w % imageWidth) (h % imageHeight) in
             (d imageWidth * scalingFactor, d imageHeight * scalingFactor)
 
         Width  w -> (d w, d w * srcRatio)
@@ -146,5 +146,5 @@ scale size (Friday.convert . runImage -> image :: Friday.RGBA) =
           , rHeight = cropHeight
           }
 
-    d :: Int -> Double
-    d = fromIntegral
+    d :: Int -> Ratio Int
+    d a = a % 1
