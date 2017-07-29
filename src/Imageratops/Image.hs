@@ -6,7 +6,7 @@ import Imageratops.Prelude
 
 import qualified Control.Exception
 import qualified Data.ByteString.Lazy       as ByteString.Lazy
-import           Data.Ratio                 ((%))
+import           Data.Ratio                 (Ratio, (%))
 import qualified Servant
 import           Servant.JuicyPixels        as Servant
   (BMP, GIF, JPEG, PNG, RADIANCE, TGA, TIFF)
