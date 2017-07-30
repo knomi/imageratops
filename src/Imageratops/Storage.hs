@@ -22,7 +22,7 @@ readFS
   => FilePath -> ImageId -> m ImageBody
 readFS dir imageId = do
   file <- liftIO $ LByteString.readFile filename
-  ImageBody.fromByteString file
+  ImageBody.decode file
   where
     filename = dir </> ImageId.toString imageId
 
@@ -38,7 +38,7 @@ readS3 :: (MonadAWS m, MonadResource m) => S3.BucketName -> ImageId -> m ImageBo
 readS3 bucketName imageId = do
   gors <- AWS.send $ S3.getObject bucketName $ imageKey imageId
   body <- AWS.sinkBody (gors ^. S3.gorsBody) Conduit.sinkLazy
-  ImageBody.fromByteString body
+  ImageBody.decode body
 
 writeS3 :: (MonadAWS m, MonadResource m) => S3.BucketName -> ImageBody -> m ImageId
 writeS3 bucketName imageBody = do

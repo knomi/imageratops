@@ -63,6 +63,7 @@ library
     , wai
     , http-types
     , http-api-data
+    , http-media
     , network-uri
     , wai-extra
     , warp
@@ -130,6 +131,7 @@ executable imageratops-server
     , wai
     , http-types
     , http-api-data
+    , http-media
     , network-uri
     , wai-extra
     , warp

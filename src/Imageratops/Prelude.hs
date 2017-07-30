@@ -5,13 +5,16 @@ module Imageratops.Prelude
 
 import Prelude as X
 
-import Control.Applicative          as X
-import Control.Category             as X (Category, (<<<), (>>>))
-import Control.DeepSeq              as X (NFData, deepseq, ($!!))
+import Control.Applicative    as X
+import Control.Category       as X (Category, (<<<), (>>>))
+import Control.DeepSeq        as X (NFData, deepseq, ($!!))
+import Control.Monad.Identity as X (Identity(..))
+
 import Control.Exception.Safe       as X
   (Exception, bracket, bracket_, catch, handle, throwM, throwString, try)
 import Control.Lens                 as X
   (Lens, Lens', lens, makeLenses, over, set, view, (.~), (?~), (^.))
+import Control.Monad                as X (msum)
 import Control.Monad.Catch          as X (MonadCatch(), MonadThrow())
 import Control.Monad.Except         as X
   ( Except

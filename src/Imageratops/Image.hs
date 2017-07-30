@@ -4,91 +4,65 @@ module Imageratops.Image where
 
 import Imageratops.Prelude
 
-import qualified Control.Exception
-import qualified Data.ByteString.Lazy       as ByteString.Lazy
-import           Data.Ratio                 (Ratio, (%))
+import qualified Data.ByteString.Lazy         as ByteString.Lazy
+import           Data.Ratio                   (Ratio, (%))
+import           Network.HTTP.Media.MediaType ((//))
 import qualified Servant
-import           Servant.JuicyPixels        as Servant
-  (BMP, GIF, JPEG, PNG, RADIANCE, TGA, TIFF)
-import qualified Vision.Image               as Friday
-import qualified Vision.Image.Storage.DevIL as Friday
-import           Vision.Primitive           ((:.)(..), Z(..))
-import qualified Vision.Primitive           as Friday
+import qualified Vision.Image                 as Friday
+import qualified Vision.Image.Storage.DevIL   as Friday
+import           Vision.Primitive             ((:.)(..), Z(..))
+import qualified Vision.Primitive             as Friday
 
 import Imageratops.Error    as Error
 import Imageratops.Geometry as Geometry
+
+data Content format
+
+type JPEG = Content 'JPEG
+type PNG  = Content 'PNG
+type Origin = Content 'Identity
+
+data Format
+  = JPEG
+  | PNG
+  deriving (Show, Eq, Ord, Enum, Bounded)
+
+instance Servant.Accept (Content 'Identity) where
+  contentType _ = "*" // "*"
+
+instance Servant.Accept (Content 'JPEG) where
+  contentType _ = "image" // "jpeg"
+
+instance Servant.Accept (Content 'PNG) where
+  contentType _ = "image" // "png"
 
 newtype Image = Image
   { runImage :: Friday.StorageImage }
 
 fromByteString
-  :: (Friday.LoadImageType t, MonadThrow m)
-  => t -> LByteString -> m Image
+  :: (MonadError Error.ImageDecodingFailed m)
+  => Format -> LByteString -> m Image
 fromByteString format =
-  either (throwM . Error.ImageDecodingFailed) (pure . Image)
-    . Friday.loadBS format
+  either (throwError . Error.ImageDecodingFailed) (pure . Image)
+    . reader
     . ByteString.Lazy.toStrict
+  where
+    reader = case format of
+      JPEG -> Friday.loadBS Friday.JPG
+      PNG  -> Friday.loadBS Friday.PNG
 
-instance Servant.MimeUnrender Servant.OctetStream Image where
-  mimeUnrender _ = fridayUnrender Friday.Autodetect
-
-instance (KnownNat q, (q <=? 100) ~ 'True)
-  => Servant.MimeUnrender (JPEG q) Image where
-  mimeUnrender _ = fridayUnrender Friday.JPG
-
-instance Servant.MimeUnrender PNG Image where
-  mimeUnrender _ = fridayUnrender Friday.PNG
-
-instance Servant.MimeUnrender BMP Image where
-  mimeUnrender _ = fridayUnrender Friday.BMP
-
-instance Servant.MimeUnrender GIF Image where
-  mimeUnrender _ = fridayUnrender Friday.GIF
-
-instance Servant.MimeUnrender RADIANCE Image where
-  mimeUnrender _ = fridayUnrender Friday.HDR
-
-instance Servant.MimeUnrender TGA Image where
-  mimeUnrender _ = fridayUnrender Friday.TGA
-
-instance Servant.MimeUnrender TIFF Image where
-  mimeUnrender _ = fridayUnrender Friday.TIFF
-
-fridayUnrender
-  :: Friday.LoadImageType t
-  => t -> LByteString -> Either String Image
-fridayUnrender format =
-  bimap show Image
-    . Friday.loadBS format
-    . ByteString.Lazy.toStrict
-
-instance (KnownNat q, (q <=? 100) ~ 'True)
-  => Servant.MimeRender (JPEG q) Image where
-  mimeRender _ = fridayRender Friday.JPG
-
-instance Servant.MimeRender PNG Image where
-  mimeRender _ = fridayRender Friday.PNG
-
-instance Servant.MimeRender BMP Image where
-  mimeRender _ = fridayRender Friday.BMP
-
-instance Servant.MimeRender RADIANCE Image where
-  mimeRender _ = fridayRender Friday.HDR
-
-instance Servant.MimeRender TGA Image where
-  mimeRender _ = fridayRender Friday.TGA
-
-instance Servant.MimeRender TIFF Image where
-  mimeRender _ = fridayRender Friday.TIFF
-
-fridayRender
-  :: Friday.SaveBSImageType t
-  => t -> Image -> LByteString
-fridayRender format =
-  either (Control.Exception.throw . Error.ImageEncodingFailed)
-         ByteString.Lazy.fromStrict
-    . Friday.saveBS format
+toByteString
+  :: (MonadError Error.ImageEncodingFailed m)
+  => Format -> Image -> m LByteString
+toByteString format =
+  either (throwError . Error.ImageEncodingFailed)
+         (pure . ByteString.Lazy.fromStrict)
+    . writer
     . runImage
+  where
+    writer = case format of
+      JPEG -> Friday.saveBS Friday.JPG
+      PNG  -> Friday.saveBS Friday.PNG
 
 scale :: FitTo -> Image -> Image
 scale size (Friday.convert . runImage -> image :: Friday.RGBA) =

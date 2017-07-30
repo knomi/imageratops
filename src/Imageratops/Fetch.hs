@@ -37,7 +37,7 @@ fromHttpRequest request = do
   manager <- asks getHttpManager
   response <- liftIO $ Http.httpLbs request manager
   let body = Http.responseBody response
-  ImageBody.fromByteString body
+  ImageBody.decode body
 
 --urls <- Text.lines <$> Text.readFile "/home/zudov/images.txt"
 --let postConcurrently = Async.mapConcurrently $ \url -> do { req <- Http.parseRequest "http://localhost:8080"; Http.httpLbs (Http.setQueryString [("url", Just $ Text.encodeUtf8 url)] $ req { Http.method = "POST" }) manager; }
