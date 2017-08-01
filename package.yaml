@@ -33,6 +33,7 @@ dependencies:
 - deepseq
 - vector
 - cryptohash
+- directory
 #- blockhash
 
 - JuicyPixels

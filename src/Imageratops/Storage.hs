@@ -6,6 +6,7 @@ import qualified Conduit
 import qualified Data.ByteString.Lazy as LByteString
 import qualified Network.AWS          as AWS
 import qualified Network.AWS.S3       as S3
+import           System.Directory     (createDirectoryIfMissing)
 import           System.FilePath      ((</>))
 
 import           Imageratops.ImageBody (ImageBody)
@@ -28,6 +29,7 @@ readFS dir imageId = do
 
 writeFS :: (MonadIO m) => FilePath -> ImageBody -> m ImageId
 writeFS dir imageBody = imageId <$ do
+  liftIO $ createDirectoryIfMissing True dir
   liftIO $ LByteString.writeFile filename file
   where
     filename = dir </> ImageId.toString imageId
@@ -47,7 +49,6 @@ writeS3 bucketName imageBody = do
   where
     body = AWS.toBody $ ImageBody.toByteString imageBody
     imageId = ImageId.fromImage $ ImageBody.toImage imageBody
-
 
 imageKey :: ImageId -> S3.ObjectKey
 imageKey = S3.ObjectKey . ImageId.toText

@@ -44,6 +44,7 @@ library
     , deepseq
     , vector
     , cryptohash
+    , directory
     , JuicyPixels
     , JuicyPixels-extra
     , JuicyPixels-scale-dct
@@ -112,6 +113,7 @@ executable imageratops-server
     , deepseq
     , vector
     , cryptohash
+    , directory
     , JuicyPixels
     , JuicyPixels-extra
     , JuicyPixels-scale-dct
